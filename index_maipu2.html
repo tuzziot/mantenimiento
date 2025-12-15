@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planilla de Mantenimiento Preventivo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        h1 {
+            color: #2d3748;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #718096;
+            font-size: 1.1em;
+        }
+
+        h2 {
+            color: #4a5568;
+            margin: 30px 0 20px;
+            padding-left: 15px;
+            border-left: 4px solid #667eea;
+            font-size: 1.4em;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        input, select, textarea {
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+            background-color: #f7fafc;
+            font-family: inherit;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            background-color: #fff;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        input[readonly] {
+            background-color: #edf2f7;
+            color: #718096;
+            cursor: not-allowed;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85em;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            background-color: #fff;
+        }
+
+        tr:hover td {
+            background-color: #f7fafc;
+        }
+
+        .checkbox-cell {
+            text-align: center;
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .status-select {
+            padding: 15px;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-secondary {
+            background-color: #48bb78;
+            color: white;
+            box-shadow: 0 4px 15px rgba(72, 187, 120, 0.4);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(72, 187, 120, 0.5);
+        }
+
+        .btn-danger {
+            background-color: #f56565;
+            color: white;
+            box-shadow: 0 4px 15px rgba(245, 101, 101, 0.4);
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 101, 101, 0.5);
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .alert-success {
+            background-color: #c6f6d5;
+            color: #22543d;
+            border-left: 4px solid #48bb78;
+        }
+
+        .alert-warning {
+            background-color: #feebc8;
+            color: #744210;
+            border-left: 4px solid #ed8936;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+                padding: 20px;
+            }
+            
+            .buttons {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.6em;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📋 Planilla de Mantenimiento Preventivo</h1>
+        <p class="subtitle">Sistema de Gestión de Mantenimiento Industrial</p>
+    </div>
+
+    <div id="alertSuccess" class="alert alert-success">
+        ✓ Planilla guardada exitosamente
+    </div>
+
+    <div id="alertWarning" class="alert alert-warning">
+        ⚠ Por favor complete todos los campos obligatorios
+    </div>
+
+    <h2>📍 Datos del Equipo</h2>
+    <div class="grid">
+        <div class="form-group">
+            <label>Estación</label>
+            <input type="text" value="Bomba Maipú" readonly>
+        </div>
+        <div class="form-group">
+            <label>Código de equipo</label>
+            <input type="text" value="0001" readonly>
+        </div>
+        <div class="form-group">
+            <label>Tipo de bomba</label>
+            <select id="tipoBomba">
+                <option selected>Centrífuga</option>
+                <option>Sumergible</option>
+                <option>Multietapa</option>
+                <option>Desplazamiento positivo</option>
+                <option>Axial</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Marca / Modelo</label>
+            <input type="text" value="Grundfos" readonly>
+        </div>
+        <div class="form-group">
+            <label>Potencia (kW / HP)</label>
+            <input type="text" value="1000 kW - 25 HP" readonly>
+        </div>
+        <div class="form-group">
+            <label>Tensión / Corriente nominal</label>
+            <input type="text" value="380 V - 65 A" readonly>
+        </div>
+        <div class="form-group">
+            <label>Fecha *</label>
+            <input type="date" id="fecha" required>
+        </div>
+        <div class="form-group">
+            <label>Técnico responsable *</label>
+            <input type="text" id="tecnico" placeholder="Nombre y apellido" required>
+        </div>
+    </div>
+
+    <h2>✅ Checklist de Mantenimiento Preventivo</h2>
+    <div class="table-container">
+        <table id="checklistTable">
+            <thead>
+                <tr>
+                    <th style="width: 40%;">Ítem</th>
+                    <th style="width: 10%;">OK</th>
+                    <th style="width: 10%;">FALLA</th>
+                    <th style="width: 40%;">Observaciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Fugas en sello mecánico</td>
+                    <td class="checkbox-cell"><input type="checkbox" class="check-ok" data-row="0"></td>
+                    <td class="checkbox-cell"><input type="checkbox" class="check-no" data-row="0"></td>
+                    <td><input type="text" class="obs-input"></td>
+                </tr>
+                <tr>
+                    <td>Ruidos anormales</td>
+                    <td class="checkbox-cell"><input type="checkbox" class="check-ok" data-row="1"></td>
+                    <td class="checkbox-cell"><input type="checkbox" class="check-no" data-row="1"></td>
+                    <td><input type="text" class="obs-input"></td>
+                </tr>
+                <tr>
+                    <td>Vibraciones</td>
+                    <td class="checkbox-cell"><input type="checkbox" class="check-ok" data-row="2"></td>
+                    <td class="checkbox-cell"><input type="checkbox" class="check-no" data-row="2"></td>
+                    <td><input type="text" class="obs-input"></td>
+                </tr>
+                <tr>
+                    <td>Corriente por fase correcta</td>
+                    <td class="checkbox-cell"><input type="checkbox" class="check-ok" data-row="3"></td>
+                    <td class="checkbox-cell"><input type="checkbox" class="check-no" data-row="3"></td>
+                    <td><input type="text" class="obs-input"></td>
+                </tr>
+                <tr>
+                    <td>Presión y caudal normales</td>
+                    <td class="checkbox-cell"><input type="checkbox" class="check-ok" data-row="4"></td>
+                    <td class="checkbox-cell"><input type="checkbox" class="check-no" data-row="4"></td>
+                    <td><input type="text" class="obs-input"></td>
+                </tr>
+                <tr>
+                    <td>Temperatura de rodamientos</td>
+                    <td class="checkbox-cell"><input type="checkbox" class="check-ok" data-row="5"></td>
+                    <td class="checkbox-cell"><input type="checkbox" class="check-no" data-row="5"></td>
+                    <td><input type="text" class="obs-input"></td>
+                </tr>
+                <tr>
+                    <td>Estado de aislamiento eléctrico</td>
+                    <td class="checkbox-cell"><input type="checkbox" class="check-ok" data-row="6"></td>
+                    <td class="checkbox-cell"><input type="checkbox" class="check-no" data-row="6"></td>
+                    <td><input type="text" class="obs-input"></td>
+                </tr>
+                <tr>
+                    <td>Nivel y estado del lubricante</td>
+                    <td class="checkbox-cell"><input type="checkbox" class="check-ok" data-row="7"></td>
+                    <td class="checkbox-cell"><input type="checkbox" class="check-no" data-row="7"></td>
+                    <td><input type="text" class="obs-input"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>🔧 Acciones Realizadas</h2>
+    <div class="form-group">
+        <textarea id="acciones" placeholder="Detalle de tareas realizadas durante el mantenimiento..."></textarea>
+    </div>
+
+    <h2>📝 Observaciones Importantes</h2>
+    <div class="form-group">
+        <textarea id="observaciones" placeholder="Observaciones relevantes, recomendaciones o hallazgos importantes..."></textarea>
+    </div>
+
+    <h2>🔍 Estado Final del Equipo</h2>
+    <div class="form-group">
+        <select id="estadoFinal" class="status-select">
+            <option value="operativo">✓ Operativo</option>
+            <option value="observaciones">⚠ Operativo con observaciones</option>
+            <option value="fuera">✗ Fuera de servicio</option>
+        </select>
+    </div>
+
+    <h2>📅 Próximo Mantenimiento</h2>
+    <div class="form-group">
+        <input type="date" id="proximoMant">
+    </div>
+
+    <div class="buttons">
+        <button class="btn-secondary" onclick="imprimirPlanilla()">🖨️ Imprimir</button>
+        <button class="btn-primary" onclick="guardarPlanilla()">💾 Guardar</button>
+        <button class="btn-danger" onclick="limpiarFormulario()">🗑️ Limpiar</button>
+    </div>
+</div>
+
+<script>
+    // Establecer fecha actual
+    document.getElementById("fecha").valueAsDate = new Date();
+    
+    // Calcular próximo mantenimiento (90 días desde hoy)
+    const hoy = new Date();
+    const proximaFecha = new Date(hoy);
+    proximaFecha.setDate(proximaFecha.getDate() + 90);
+    document.getElementById("proximoMant").valueAsDate = proximaFecha;
+
+    // Lógica para checkboxes mutuamente excluyentes
+    const checkboxesOK = document.querySelectorAll('.check-ok');
+    const checkboxesNO = document.querySelectorAll('.check-no');
+
+    checkboxesOK.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                const row = this.dataset.row;
+                const correspondingNO = document.querySelector(`.check-no[data-row="${row}"]`);
+                correspondingNO.checked = false;
+            }
+        });
+    });
+
+    checkboxesNO.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                const row = this.dataset.row;
+                const correspondingOK = document.querySelector(`.check-ok[data-row="${row}"]`);
+                correspondingOK.checked = false;
+            }
+        });
+    });
+
+    function guardarPlanilla() {
+        const fecha = document.getElementById('fecha').value;
+        const tecnico = document.getElementById('tecnico').value;
+        
+        if (!fecha || !tecnico) {
+            mostrarAlerta('warning');
+            return;
+        }
+
+        const datos = {
+            fecha: fecha,
+            tecnico: tecnico,
+            tipoBomba: document.getElementById('tipoBomba').value,
+            checklist: obtenerChecklist(),
+            acciones: document.getElementById('acciones').value,
+            observaciones: document.getElementById('observaciones').value,
+            estadoFinal: document.getElementById('estadoFinal').value,
+            proximoMant: document.getElementById('proximoMant').value
+        };
+
+        console.log('Datos guardados:', datos);
+        localStorage.setItem('ultimaInspeccion', JSON.stringify(datos));
+        mostrarAlerta('success');
+    }
+
+    function obtenerChecklist() {
+        const items = [];
+        const rows = document.querySelectorAll('#checklistTable tbody tr');
+        
+        rows.forEach((row, index) => {
+            const ok = row.querySelector('.check-ok').checked;
+            const no = row.querySelector('.check-no').checked;
+            const obs = row.querySelector('.obs-input').value;
+            const item = row.cells[0].textContent;
+            
+            items.push({ item, ok, no, obs });
+        });
+        
+        return items;
+    }
+
+    function mostrarAlerta(tipo) {
+        const alertas = document.querySelectorAll('.alert');
+        alertas.forEach(a => a.style.display = 'none');
+        
+        const alerta = document.getElementById(tipo === 'success' ? 'alertSuccess' : 'alertWarning');
+        alerta.style.display = 'block';
+        
+        setTimeout(() => {
+            alerta.style.display = 'none';
+        }, 3000);
+    }
+
+    function imprimirPlanilla() {
+        window.print();
+    }
+
+    function limpiarFormulario() {
+        if (confirm('¿Está seguro de que desea limpiar todos los campos?')) {
+            document.getElementById('tecnico').value = '';
+            document.getElementById('acciones').value = '';
+            document.getElementById('observaciones').value = '';
+            
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+            document.querySelectorAll('.obs-input').forEach(input => input.value = '');
+            
+            document.getElementById('fecha').valueAsDate = new Date();
+            const hoy = new Date();
+            const proximaFecha = new Date(hoy);
+            proximaFecha.setDate(proximaFecha.getDate() + 90);
+            document.getElementById('proximoMant').valueAsDate = proximaFecha;
+        }
+    }
+</script>
+</body>
+</html>
